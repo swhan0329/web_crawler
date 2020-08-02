@@ -1,4 +1,4 @@
-# web_crawler
+# web_crawler version2
 
 1. install requirements.txt
 ```bash
@@ -6,6 +6,6 @@
 ```
 2. run 'main.py'
 
-3. You can get jobs.csv file in the directory.
+3. You can search the jobs in the web page. There is a button for saving the results.
 
-4. Once open the 'jobs.csv' file, you can find all jobs related to 'machine learning' jobs in indeed.com and incruit.com.
+4. Once save the 'jobs.csv' file, you can find all jobs related to jobs what you want to find in incruit.com.
