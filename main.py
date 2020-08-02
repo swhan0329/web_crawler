@@ -1,9 +1,42 @@
-from indeed import get_whole_jobs as get_indeed_jobs
-from linkedin import get_whole_jobs as get_linkedin_jobs
+from incruit import get_whole_jobs as get_incruit_jobs
+from flask import Flask, render_template, request, redirect, send_file
 from save import save_to_file
+app = Flask("SuperScrapper")
+db = {}
 
-indeed_jobs = get_indeed_jobs()
-linkedin_jobs = get_linkedin_jobs()
+@app.route("/")
+def home():
+    return render_template("potato.html")
 
-jobs = indeed_jobs + linkedin_jobs
-save_to_file(jobs)
+@app.route("/report")
+def report():
+    word = request.args.get('word')
+    if word:
+        word = word.lower()
+        existingJobs = db.get(word)
+        if existingJobs:
+            jobs = existingJobs
+        else:
+            jobs = get_incruit_jobs(word)
+            db[word] = jobs
+    else:
+        redirect("/")
+    return render_template("report.html",searchingBy=word,
+                           resultsNumber=len(jobs),jobs=jobs)
+
+@app.route("/export")
+def export():
+    try:
+        word = request.args.get('word')
+        if not word:
+            raise Exception()
+        word = word.lower()
+        jobs = db.get(word)
+        if not jobs:
+            raise Exception()
+        save_to_file(jobs)
+        return send_file("jobs.csv")
+    except:
+        return redirect("/")
+
+app.run(host="127.0.0.1")
